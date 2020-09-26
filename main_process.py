@@ -1,4 +1,6 @@
 import sys
+import codecs
+import os
 import datetime
 import configparser
 from extraccionFtp import  ExtraccionFtp
@@ -12,6 +14,10 @@ FTP_USER    = config['extraccion']['user_ftp']
 FTP_PASS    = config['extraccion']['pass_ftp']
 PATH_REMOTE = config['extraccion']['path_remoto']
 PATH_LOCAL  = config['extraccion']['path_local']
+
+## Datos de manipulación
+ENDWITH = config['manipulacion']['extension']
+
 
 '''
 #################################################################################################################################
@@ -55,11 +61,29 @@ if __name__ == '__main__':
     
     extraccion.full("Descargar archivos remotos ","paso 2")
     
-    for file in array_files:
+    """ for file in array_files:
         result = extraccion.download_file(PATH_REMOTE,PATH_LOCAL,file['name'])
         array_rows.append([PATH_REMOTE,PATH_LOCAL,file['name'],result])
         
-    print(extraccion.getTablePretty(array_header,array_rows))
+    print(extraccion.getTablePretty(array_header,array_rows)) """
     
     extraccion.full("Cerrando conexión FTP","paso 3")
     extraccion.close()
+
+    ##Logic
+    print("-"*80)
+    print("*"*1,"Manipulación de log validos *.log","*"*1)
+    print("-"*80)
+
+    array_logs = os.listdir(PATH_LOCAL)
+
+    for file in array_logs:
+        if file.endswith(ENDWITH):
+            print('archivo valido : {0}'.format(file))
+            with codecs.open(PATH_LOCAL+file, 'r', encoding='utf-8', errors='ignore') as fdata:
+                print(fdata.readlines())
+            
+
+
+    
+
