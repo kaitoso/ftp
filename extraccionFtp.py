@@ -18,6 +18,8 @@ class ExtraccionFtp:
     def full(self,msg, level ):
             str_dattime = str(datetime.datetime.now())
             print('{0} - {1} - {2}'.format( str_dattime, level, msg))
+    
+    
        
     def close(self):
         try:
